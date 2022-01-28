@@ -6,7 +6,9 @@ using System.Linq;
 using System;
 
 #pragma warning disable IDE0051 // Remove unused private members
+#pragma warning disable IDE0063 // Use simple 'using' statement
 #pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0090 // Use 'new(...)'
 
 public class Scanner : MonoBehaviour
 {
@@ -1161,32 +1163,32 @@ public class Scanner : MonoBehaviour
 
 			using (var winningThreadLock = new Mutex())
 			{
-				for (int i = 0, iMax = _scanners.Count; i < iMax; ++i)
-				{
-					if (_foundScannerIndexes.Contains(i))
-					{
-						continue;
-					}
+				List<int> scannerIndexesToSearch = _scanners.Select((_, i) => i).Where(i => !_foundScannerIndexes.Contains(i)).ToList();
 
+				for (int i = 0, iMax = Math.Max(Environment.ProcessorCount - 1, 0); i < iMax; ++i)
+				{
 					using (var threadStarted = new Semaphore(0, 1))
 					{
 						var thread = new Thread(() =>
 						{
-							int threadScannerIndex = i;
+							List<int> threadScannerIndexes = scannerIndexesToSearch.Where((_, t) => t % iMax == i).ToList();
 							CancellationToken token = cts.Token;
 							threadStarted.Release();
-							if (ScannersOverlap(_foundBeacons, _scanners[threadScannerIndex],
-								out Vector3Int scannerLocation, out List<Vector3Int> orientedBeacons, token))
+							threadScannerIndexes.ForEach(t =>
 							{
-								winningThreadLock.WaitOne();
-								if (transformedScanner == null)
+								if (ScannersOverlap(_foundBeacons, _scanners[t],
+									out Vector3Int scannerLocation, out List<Vector3Int> orientedBeacons, token))
 								{
-									winningThreadScannerIndex = threadScannerIndex;
-									_scannerLocations.Add(scannerLocation);
-									transformedScanner = orientedBeacons;
+									winningThreadLock.WaitOne();
+									if (transformedScanner == null)
+									{
+										winningThreadScannerIndex = t;
+										_scannerLocations.Add(scannerLocation);
+										transformedScanner = orientedBeacons;
+									}
+									winningThreadLock.ReleaseMutex();
 								}
-								winningThreadLock.ReleaseMutex();
-							}
+							});
 						});
 						threads.Add(thread);
 						thread.Start();
@@ -1230,14 +1232,8 @@ public class Scanner : MonoBehaviour
 
 		int distance = 0;
 
-		foreach (Vector3Int scannerA in _scannerLocations)
-		{
-			foreach (Vector3Int scannerB in _scannerLocations)
-			{
-				distance = Mathf.Max(distance,
-					Mathf.Abs(scannerB.x - scannerA.x) + Mathf.Abs(scannerB.y - scannerA.y) + Mathf.Abs(scannerB.z - scannerA.z));
-			}
-		}
+		_scannerLocations.ForEach(a => _scannerLocations.ForEach(b =>
+				distance = Mathf.Max(distance, Mathf.Abs(b.x - a.x) + Mathf.Abs(b.y - a.y) + Mathf.Abs(b.z - a.z))));
 
 		Debug.Log($"Largest Manhattan distance: {distance}"); // Part B
 
@@ -1359,5 +1355,6 @@ public class Scanner : MonoBehaviour
 	}
 }
 
+#pragma warning restore IDE0090 // Use 'new(...)'
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore IDE0051 // Remove unused private members
