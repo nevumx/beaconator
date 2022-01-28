@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.3587269, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -132,7 +132,6 @@ GameObject:
   - component: {fileID: 533831350}
   - component: {fileID: 533831349}
   - component: {fileID: 533831348}
-  - component: {fileID: 533831347}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -140,19 +139,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!65 &533831347
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 533831346}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &533831348
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -246,8 +232,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cube: {fileID: 533831350}
   _sphere: {fileID: 1327743773}
-  _altitudeAngleDegrees: 45
   _camera: {fileID: 963194227}
+  _altitudeAngleDegrees: 45
 --- !u!20 &963194227
 Camera:
   m_ObjectHideFlags: 0
@@ -316,7 +302,6 @@ GameObject:
   - component: {fileID: 1327743773}
   - component: {fileID: 1327743772}
   - component: {fileID: 1327743771}
-  - component: {fileID: 1327743770}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -324,19 +309,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!65 &1327743770
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1327743769}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1327743771
 MeshRenderer:
   m_ObjectHideFlags: 0
